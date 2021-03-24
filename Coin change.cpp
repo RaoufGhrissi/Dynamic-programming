@@ -1,53 +1,38 @@
-// { Driver Code Starts
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 using namespace std;
 
- // } Driver Code Ends
-class Solution
-{
-  public:
-    long long int dp[1001][1001];
-    long long int f(int S[], int n, int s)
-    {
-        if (dp[n][s] != -1)
-            return dp[n][s];
+vector<string> dict;
 
-        if (s == 0)
-            dp[n][s] = 1;
-        else if (n == 0)
-            dp[n][s] = 0;
-        else
+int f(int n, string ch, int N)
+{
+    if (ch.size() == 0)
+        return 1;
+    else if (n == 0)
+        return 0;
+    else
+    {
+        int p = ch.rfind(dict[n-1]);
+        if ( p != -1 && p == ch.size()-dict[n-1].size())
         {
-            if (S[n-1]<=s)
-                dp[n][s] = f(S,n,s-S[n-1])+f(S,n-1,s);
-            else
-                dp[n][s] = f(S,n-1,s);
+            return f(N, ch.erase(p, dict[n-1].size())) + f(n-1, ch);
         }
-        return dp[n][s];
+        else
+            return f(n-1, ch);
     }
-    long long int count( int S[], int m, int n )
-    {
-        memset(dp, -1, sizeof(dp));
-        return f(S, m, n);
-    }
-};
+}
 
-// { Driver Code Starts.
-int main()
-{
-    int t;
-    cin>>t;
-	while(t--)
-	{
-		int n,m;
-		cin>>n>>m;
-		int arr[m];
-		for(int i=0;i<m;i++)
-		    cin>>arr[i];
-	    Solution ob;
-		cout<<ob.count(arr,m,n)<<endl;
-	}
+int main() {
+        int n;
+        cin>>n;
+        dict.clear();
+        for(int i=0;i<n;i++){
+            string S;
+            cin>>S;
+            dict.push_back(S);
+        }
+        string line;
+        cin>>line;
+        cout<<f(n, line)<<"\n";
+        return 0;
+}
 
-
-    return 0;
-}  // } Driver Code Ends
