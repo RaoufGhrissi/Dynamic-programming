@@ -1,53 +1,60 @@
 // { Driver Code Starts
-#include <bits/stdc++.h>
+//Initial template for C++
+
+#include<bits/stdc++.h>
 using namespace std;
 
+int shortestCommonSupersequence(char* , char*, int, int );
 
- // } Driver Code Ends
-
-long long dp[1001][1001];
-
-long long f(int i, int j, int arr[], int n)
-{
-    if (dp[i][j] != -1)
-        return dp[i][j];
-
-    if (i>j)
-        dp[i][j] = 0;
-    else
-        dp[i][j] = max(arr[i]+min(f(i+2,j,arr,n), f(i+1,j-1,arr,n)),
-                       arr[j]+min(f(i,j-2,arr,n), f(i+1,j-1,arr,n)));
-    return dp[i][j];
+int main()
+{   
+    
+    int t;
+    char X[10001], Y[10001];
+    
+    //taking total testcases
+    cin >> t;
+    while(t--){
+    
+    //taking String X and Y
+	cin >> X >> Y;
+	
+	//calling function shortestCommonSupersequence()
+	cout << shortestCommonSupersequence(X, Y, strlen(X), strlen(Y))<< endl;
+    }
+	return 0;
 }
 
-long long maximumAmount(int arr[], int n)
+// } Driver Code Ends
+
+
+//User function template for C++
+
+// X : 1st given string of size m
+// Y : 2nd given string of size n
+int dp[101][101];
+int f(char* x, char* y, int m, int n) {
+    if (dp[m][n] != -1)
+        return dp[m][n];
+    
+    if (m == 0)
+        dp[m][n] = n;
+    else if (n == 0)
+        dp[m][n] = m;
+    else
+    {
+        if (x[m-1] == y[n-1])
+            dp[m][n] = 1 + f(x,y,m-1,n-1);
+        else
+        {
+            dp[m][n] = 1+min(f(x,y,m-1,n), f(x,y,m,n-1));
+        }
+    }
+    return dp[m][n];
+}
+
+int shortestCommonSupersequence(char* x, char* y, int m, int n)
 {
     memset(dp, -1, sizeof(dp));
-    return f(0, n-1, arr, n);
+    return f(x,y,m,n);
 }
-
-// { Driver Code Starts.
-
-int main() {
-
-    //taking total testcases
-	int T;
-	cin>>T;
-	while(T--)
-	{
-	    //taking number of elements
-	    int N;
-	    cin>>N;
-
-	    int A[N];
-
-	    //inserting the elements
-	    for(int i=0;i<N;i++)
-	    cin>>A[i];
-
-	    //calling function maximumAmount()
-	    cout<<maximumAmount(A,N)<<endl;
-
-	}
-	return 0;
-}  // } Driver Code Ends
